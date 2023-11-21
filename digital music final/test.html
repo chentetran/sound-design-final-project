@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>test</title>
+    <style>
+        #bpmContainer {
+            display: flex;
+            align-items: center;
+        }
+
+        #bpmText {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="page1">
+        <h1>Final Project</h1>
+        <p>introduction</p>
+        <button onclick="goToPage('page2')">gogogo</button>
+    </div>
+
+    <div id="page2" style="display: none;">
+        <h1>How are you?</h1>
+
+        <label for="option1">
+            <img src="smile.png" alt="Option 1">
+            <input type="radio" id="option1" name="answer0" onclick="showNextButton()">
+        </label>
+
+        <label for="option2">
+            <img src="sad.png" alt="Option 2">
+            <input type="radio" id="option2" name="answer0" onclick="showNextButton()">
+        </label>
+
+        <button id="nextButton" onclick="goToPage('page3')" style="display: none;">Next</button>
+    </div>
+
+    <div id="page3" style="display: none;">
+        <h1>Enviorment</h1>
+
+        <label for="option3">
+            <img src="underwater.png" alt="Option 3">
+            <input type="radio" id="option3" name="answer1" onclick="showNextButton()">
+        </label>
+
+        <label for="option4">
+            <img src="underwater.png" alt="Option 4">
+            <input type="radio" id="option4" name="answer1" onclick="showNextButton()">
+        </label>
+
+        <label for="option5">
+            <img src="underwater.png" alt="Option 5">
+            <input type="radio" id="option5" name="answer1" onclick="showNextButton()">
+        </label>
+        <br>
+        <button onclick="goToPage('page2')">back</button>
+        <button id="nextButtonPage3" onclick="goToPage('page4')" style="display: none;">next</button>
+    </div>
+
+    <div id="page4" style="display: none;">
+        <h1>controls</h1>
+        <h3>what kind of instrument would you like?</h3>
+
+        <label for="option6">
+            <img src="image6.jpg" alt="Option 6">
+            <input type="checkbox" id="option6" name="answer2">
+        </label>
+
+        <label for="option7">
+            <img src="image7.jpg" alt="Option 7">
+            <input type="checkbox" id="option7" name="answer2">
+        </label>
+
+        <label for="option8">
+            <img src="image8.jpg" alt="Option 8">
+            <input type="checkbox" id="option8" name="answer2">
+        </label>
+        
+        <h3>BPM</h3>
+    
+        <div id="bpmContainer">
+            <p>slow</p>
+            <input type="range" id="bpm" name="bpm" min="60" max="160" value="120">
+            <p>fast</p>
+        </div>
+
+        <p>current BPM：<span id="currentBpm">120</span></p>
+        
+        <h3>Dissonance</h3>
+    
+        <div id="dissonanceContainer">
+            <input type="range" id="dissonance" name="dissonance" min="1" max="10" value="2">
+        </div>
+
+        <p>Dissonance：<span id="currentDissonance">2</span></p>
+
+        <br> <!-- 插入換行標籤 -->
+
+        <button onclick="goToPage('page1')">Restart</button>
+    </div>
+
+    <script>
+        function goToPage(pageId) {
+            // 顯示指定ID的頁面，隱藏其他頁面
+            document.getElementById('page1').style.display = 'none';
+            document.getElementById('page2').style.display = 'none';
+            document.getElementById('page3').style.display = 'none';
+            document.getElementById('page4').style.display = 'none';
+
+            document.getElementById(pageId).style.display = 'block';
+
+            // 如果是第二頁或第三頁，根據是否有選擇答案，顯示下一步按鈕
+            if (pageId === 'page2' || pageId === 'page3') {
+                var selectedAnswer = document.querySelector('input[name="answer"]:checked');
+                var nextButtonId = pageId === 'page2' ? 'nextButton' : 'nextButtonPage3';
+                document.getElementById(nextButtonId).style.display = selectedAnswer ? 'inline-block' : 'none';
+            }
+
+            // 如果是第四頁，隱藏"Restart"按鈕
+            if (pageId === 'page4') {
+                document.getElementById('nextButton').style.display = 'none';
+                document.getElementById('nextButtonPage3').style.display = 'none';
+            }
+        }
+
+        function showNextButton() {
+            // 顯示下一步按鈕
+            var selectedAnswerPage2 = document.querySelector('#page2 input[name="answer0"]:checked');
+            var selectedAnswerPage3 = document.querySelector('#page3 input[name="answer1"]:checked');
+            document.getElementById('nextButton').style.display = selectedAnswerPage2 ? 'inline-block' : 'none';
+            document.getElementById('nextButtonPage3').style.display = selectedAnswerPage3 ? 'inline-block' : 'none';
+        }
+        // 監聽滑桿變化事件
+        document.getElementById('bpm').addEventListener('input', function() {
+            // 更新顯示當前BPM的元素
+            document.getElementById('currentBpm').innerText = this.value;
+        });
+         // 監聽滑桿變化事件
+        document.getElementById('dissonance').addEventListener('input', function() {
+            // 更新顯示當前 Dissonance 的元素
+            document.getElementById('currentDissonance').innerText = this.value;
+        });
+    </script>
+
+</body>
+</html>
