@@ -5,6 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>問卷調查</title>
 
+    <script type="module" defer>
+        import { Chuck } from 'https://cdn.jsdelivr.net/npm/webchuck/+esm';
+  
+        document.getElementById('action').addEventListener('click', async () => {
+            // Initialize default ChucK object, if not already initialized
+            window.theChuck = await Chuck.init([]);
+            theChuck.runCode(`
+                SinOsc sin => dac;
+                440 => sin.freq;
+                1::second => now;
+            `);
+        });
+
+      </script>
+
     <style>
         body {
             transition: background-image 0.5s;
@@ -22,12 +37,14 @@
         .slider {
             width: 200px;
         }
+        .play-button {
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
-
-    <h1>Final project</h1>
-    <p>introduction</p>
+    <h1>AI Random Song Generator</h1>
+    <p>This website creates a random song with a unique melody, chord progression, bassline and drumline using our privileged music generation algorithms. You can pick your parameters below to influence the sound of the song, then press Play to hear the music.</p>
     <!-- 第一題：兩個圖片選項 -->
     <h3>How are you?</h3>
     <form>
@@ -35,60 +52,65 @@
         <label>
             <input type="radio" name="question1" value="option1" checked>
             <img src="smile.png" alt="圖片1">
+            <span>(Major chord)</span>
         </label>
 
         <label>
             <input type="radio" name="question1" value="option2">
             <img src="sad.png" alt="圖片2">
+            <span>(Minor chord)</span>
         </label>
     </div>
     </form>
 
     <!-- 第二題：三個選項 -->
-    <h3>Envirinment</h3>
+    <h3>Environment</h3>
     <form>
     <div id="optionsContainer">
         
          <label class="option">
             <input type="radio" name="backgroundOption" value="image1" onchange="changeBackground('url(underwater.jpg)')">
-            underwater
+            Underwater
         </label>
 
         <label class="option">
             <input type="radio" name="backgroundOption" value="image2" onchange="changeBackground('url(cave.jpg)')">
-            cave
+            Cave
         </label>
         <label class="option">
             <input type="radio" name="backgroundOption" value="image3" onchange="changeBackground('url(mountain.jpg)')">
-            moutain
+            Mountain
         </label>
         
         <label class="option">
             <input type="radio" name="backgroundOption" value="none" onchange="removeBackground()" checked>
-            none
+            None
         </label>
     </div>
     </form>
 
     <!-- 第三題：三個多選選項 -->
-    <h3>What kind of instrument would you like?</h3>
+    <h3>What kind instrument would you like for the melody?</h3>
     <form>
         <label>
             <input type="checkbox" name="question3" value="optionX">
-            選項X
+            Guitar
         </label>
 
         <label>
             <input type="checkbox" name="question3" value="optionY">
-            選項Y
+            Piano
         </label>
 
         <label>
             <input type="checkbox" name="question3" value="optionZ">
-            選項Z
+            Flute
         </label>
     </form>
-    <div class="slider-container">
+    <div>
+        <button id="action" class="play-button">Play</button>
+    </div>
+    <!-- <div class="slider-container">
         <div>
             <h3>BPM</h3>
             <input type="range" id="bpm" name="bpm" min="60" max="160" value="120" class="slider">
@@ -100,7 +122,7 @@
             <input type="range" id="dissonance" name="dissonance" min="1" max="10" value="2" class="slider">
             <p>Dissonance：<span id="currentDissonance">2</span></p>
         </div>
-    </div>
+    </div> -->
 
 
     <script>
