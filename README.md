@@ -20,5 +20,7 @@ Need to have `npm`, `node`, `chuck`, and `python3` (command needs to be python3.
 
 `/generate-music-notation` - Returns a JSON object of all the notes and note lengths for the chord progression, bassline, and melody
 
+...
+
 
 
