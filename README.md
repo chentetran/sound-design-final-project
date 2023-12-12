@@ -12,7 +12,7 @@ Need to have `npm`, `node`, `chuck`, and `python3` (command needs to be python3.
 
 1. `npm install` to fetch dependencies.
 2. `node index.js` to run.
-3. Visit `http://localhost:3000/generate-music-notation` to get the notes/note lengths
+3. Visit `http://localhost:3000` to see the UI.
 
 ### Overview
 

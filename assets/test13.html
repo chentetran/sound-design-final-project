@@ -9,36 +9,17 @@
         import { Chuck } from 'https://cdn.jsdelivr.net/npm/webchuck/+esm';
   
         document.getElementById('action').addEventListener('click', async () => {
-            window.theChuck = await Chuck.init([
-                { serverFilename: "http://localhost:3000/assets/E.wav", virtualFilename: "E.wav"}
-            ]);
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "http://localhost:3000/load-drumline", true);
 
-            // await theChuck.loadFile("./player-ck");
-            // theChuck.runFile("player-ck");
-            // const wavFilePath = `http://localhost:3000/assets/E.wav`;
-            // theChuck.runCode(`
-            //     <<<
-            //     SndBuf my_player => dac;
-            //     "${wavFilePath}" => string a_music;
-            //     a_music => my_player.read;
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var responseData = JSON.parse(xhr.responseText);
+                    console.log(responseData);
+                }
+            };
 
-            //     while(true){
-            //         //<<<my_player.samples()>>>;
-            //         Math.random2(0, my_player.samples()) => int random_pos;
-            //         random_pos => my_player.pos;    
-            //         0.5 => my_player.gain;
-            //         Math.random2f(0, 1) => my_player.rate; 
-            //         //1::second => now;
-            //         Math.random2f(4,4)::second => now;
-            //     }
-            // `);
-
-            theChuck.runCode(`
-            "http://localhost:3000/assets/E.wav" => string url;
-            SndBuf buf;
-            buf.read(url);
-            buf.play();
-            `);
+            xhr.send();
            
         });
 
@@ -75,13 +56,13 @@
     <div id="optionsContainer">
         <label>
             <input type="radio" name="question1" value="option1" checked>
-            <img src="smile.png" alt="圖片1">
+            <img src="http://localhost:3000/assets/smile.png" alt="圖片1">
             <span>(Major chord)</span>
         </label>
 
         <label>
             <input type="radio" name="question1" value="option2">
-            <img src="sad.png" alt="圖片2">
+            <img src="http://localhost:3000/assets/sad.png" alt="圖片2">
             <span>(Minor chord)</span>
         </label>
     </div>
@@ -93,16 +74,16 @@
     <div id="optionsContainer">
         
          <label class="option">
-            <input type="radio" name="backgroundOption" value="image1" onchange="changeBackground('url(underwater.jpg)')">
+            <input type="radio" name="backgroundOption" value="image1" onchange="changeBackground('url(http://localhost:3000/assets/underwater.jpg)')">
             Underwater
         </label>
 
         <label class="option">
-            <input type="radio" name="backgroundOption" value="image2" onchange="changeBackground('url(cave.jpg)')">
+            <input type="radio" name="backgroundOption" value="image2" onchange="changeBackground('url(http://localhost:3000/assets/spooky.jpg)')">
             Spooky
         </label>
         <label class="option">
-            <input type="radio" name="backgroundOption" value="image3" onchange="changeBackground('url(mountain.jpg)')">
+            <input type="radio" name="backgroundOption" value="image3" onchange="changeBackground('url(http://localhost:3000/assets/video-game.jpg)')">
             Video game
         </label>
         

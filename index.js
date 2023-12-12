@@ -29,6 +29,7 @@ app.get("/load-drumline", (req, res) => {
     }
     console.log(`ChucK script output: ${stdout}`);
   });
+  res.send("OK");
 });
 
 app.get("/generate-music-notation", (req, res) => {
