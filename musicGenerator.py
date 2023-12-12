@@ -117,7 +117,7 @@ data = {
   "bassline": {
     "notes": FinalBassNoteArray,
     "note_lengths": FinalBassRhArray
-  },
+  }
 }
 
 json_string = json.dumps(data)

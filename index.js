@@ -72,7 +72,6 @@ app.get("/convert-to-midi", (req, res) => {
 });
 
 const playMidi = (midiFile = "chord_progression.mid", env = "none") => {
-  const env_flag_command = env;
   const command = `chuck ${__dirname}/play_midi.ck:${midiFile}:${env}`; // Needs to have python3 installed
   exec(command, (err, stdout, stderr) => {
     if (err) {
@@ -89,10 +88,12 @@ app.get("/play-midi", (req, res) => {
 
 app.post("/generate-and-play-song", async (req, res) => {
   const env = req.query.environment;
+  console.log(env);
   loadDrumline();
   generateMusicNotation();
   convertToMidi();
-  playMidi(env);
+  playMidi("chord_progression.mid", env);
+  playMidi("bassline.mid", env);
 
   res.send("done");
 });
