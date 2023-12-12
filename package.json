@@ -1,0 +1,17 @@
+{
+  "name": "sound-design-final-project",
+  "version": "1.0.0",
+  "description": "Project plan: https://www.figma.com/file/H52Mb7AHBM1eYl0nFM80T6/Sound-Design-Final-Project-Plan?type=whiteboard&t=nxFoGnMj3ZmJcXFG-0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2"
+  },
+  "type": "module"
+}
