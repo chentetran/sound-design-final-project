@@ -3,6 +3,7 @@ import { fileURLToPath } from "url";
 import path from "path";
 import cors from "cors";
 import { exec } from "node:child_process";
+import fs from "fs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -20,29 +21,80 @@ app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
 
-app.get("/load-drumline", (req, res) => {
-  const chuckScriptPath = __dirname + "/assets/Player.ck";
-  const command = `chuck ${chuckScriptPath}`;
+const loadDrumline = async () => {
+  const command = `chuck ${__dirname}/assets/Player.ck`;
   exec(command, (err, stdout, stderr) => {
     if (err) {
       console.error("errored");
     }
     console.log(`ChucK script output: ${stdout}`);
   });
+};
+app.get("/load-drumline", async (req, res) => {
+  loadDrumline(res);
   res.send("OK");
 });
 
-app.get("/generate-music-notation", (req, res) => {
-  const pythonScriptPath = __dirname + "/musicGenerator.py";
-  const command = `python3 ${pythonScriptPath}`; // Needs to have python3 installed
+const generateMusicNotation = (res) => {
+  const command = `python3 ${__dirname}/musicGenerator.py`; // Needs to have python3 installed
   exec(command, (err, stdout, stderr) => {
     if (err) {
       console.error(err);
       return res.status(500).json({ error: "Internal Server Error" });
     }
     console.log(stdout);
-    return res.json(JSON.parse(stdout));
+
+    const outputFilePath = `${__dirname}/output_music_notation.json`;
+    fs.writeFileSync(outputFilePath, stdout);
+
+    console.log(`Output written to: ${outputFilePath}`);
+
+    return JSON.parse(stdout);
   });
+};
+app.get("/generate-music-notation", (req, res) => {
+  res.json(generateMusicNotation());
+});
+
+const convertToMidi = () => {
+  const command = `python3 ${__dirname}/convert_to_midi.py output_music_notation.json`; // Needs to have python3 installed
+  exec(command, (err, stdout, stderr) => {
+    if (err) {
+      console.error(err);
+      return;
+    }
+    console.log(stdout);
+  });
+};
+app.get("/convert-to-midi", (req, res) => {
+  convertToMidi();
+  res.send("cool");
+});
+
+const playMidi = (midiFile = "chord_progression.mid", env = "none") => {
+  const env_flag_command = env;
+  const command = `chuck ${__dirname}/play_midi.ck:${midiFile}:${env}`; // Needs to have python3 installed
+  exec(command, (err, stdout, stderr) => {
+    if (err) {
+      console.error(err);
+      return;
+    }
+    console.log(stdout);
+  });
+};
+app.get("/play-midi", (req, res) => {
+  playMidi();
+  res.send("OK");
+});
+
+app.post("/generate-and-play-song", async (req, res) => {
+  const env = req.query.environment;
+  loadDrumline();
+  generateMusicNotation();
+  convertToMidi();
+  playMidi(env);
+
+  res.send("done");
 });
 
 app.use("/assets", express.static(path.join(__dirname, "assets")));
