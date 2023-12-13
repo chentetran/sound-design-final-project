@@ -5,6 +5,7 @@ import sys
 def create_midi_from_music_notation(music_notation):
     chord_progression_data = music_notation["chord_progression"]
     bassline_data = music_notation["bassline"]
+    melody_data = music_notation.get("melody", None)
 
     # Extract chord notes and lengths from the provided chord progression data
     chord_notes = chord_progression_data["notes"]
@@ -48,6 +49,25 @@ def create_midi_from_music_notation(music_notation):
 
     # Write the bassline MIDI file
     bassline_stream.write('midi', fp='bassline.mid')
+
+    # If melody data is provided, handle it
+    if melody_data:
+        melody_notes = melody_data["notes"]
+        melody_note_lengths = melody_data["note_lengths"]
+
+        # Create melody notes and lengths
+        melody_notes_obj = [note.Note(n) for n in melody_notes]
+        melody_stream = stream.Score()
+        melody_part = stream.Part()
+        for melody_note, length in zip(melody_notes_obj, melody_note_lengths):
+            melody_note.quarterLength = length
+            melody_part.append(melody_note)
+
+        # Append the melody part to the melody stream
+        melody_stream.append(melody_part)
+
+        # Write the melody MIDI file
+        melody_stream.write('midi', fp='melody.mid')
 
 def main(json_file):
     with open(json_file, 'r') as file:

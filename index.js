@@ -89,9 +89,11 @@ app.get("/play-midi", (req, res) => {
 app.post("/generate-and-play-song", async (req, res) => {
   const env = req.query.environment;
   console.log(env);
-  loadDrumline();
+  // loadDrumline();
   generateMusicNotation();
   convertToMidi();
+  // playDrumsMidi("drums.mid");
+  playMidi("melody.mid", env);
   playMidi("chord_progression.mid", env);
   playMidi("bassline.mid", env);
 
