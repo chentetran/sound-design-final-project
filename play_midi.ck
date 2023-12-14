@@ -40,7 +40,7 @@ for( int t; t < min.numTracks(); t++ ) {
     if (environment == "underwater") {
         spork ~ WaterFunc( t );
     } else if (environment == "spooky") {
-        // TODO implement
+        spork ~ CreepFunc( t );
     } else if (environment == "video game") {
         // TODO implement
     } else {
@@ -152,5 +152,104 @@ fun void WaterFunc( int track )
     }
     // done with track
     */
+    done++;
+}
+
+fun void CreepFunc( int track )
+{ if (track == 1) 
+   {NRev reverb => dac;
+    BlowHole s => reverb ;
+    //800 => filter.freq;=> LPF filter
+    0.2 => s.gain;
+    0.05 => reverb.mix;
+    //0 => echo.gain;=> Echo echo
+   // 0.10:: second => echo.max=> echo.delay;
+        //wat => s ;
+    while( min.read( msg, track ) )
+        {
+            // this means no more MIDI events at current time; advance time
+            if( msg.when > 0::second )
+                msg.when  => now; // this could be used to change speed 
+        
+            // catch NOTEON messages (lower nibble == 0x90)
+            if( (msg.data1 & 0xF0) == 0x90 && msg.data2 > 0 && msg.data3 > 0 )
+            {
+            // get the pitch and convert to frequencey; set
+            msg.data2 => Std.mtof => s.freq;
+            // velocity data; note on
+            msg.data3/127.0 => s.noteOn;
+            cherr <= "NOTE ON track:" <= track <= " pitch:" <= msg.data2 <=" velocity:" <= msg.data3 <= IO.newline(); 
+            }
+         }
+     } 
+   if (track == 2)
+    {   NRev reverb => dac;
+        0.05 => reverb.mix;
+        Mandolin s ;
+        1 => s.bodySize;
+        0.2 => s.gain;
+        s => reverb;
+    
+        while( min.read( msg, track ) )
+        {
+            // this means no more MIDI events at current time; advance time
+            if( msg.when > 0::second )
+                msg.when  => now; // this could be used to change speed 
+        
+        // catch NOTEON messages (lower nibble == 0x90)
+            if( (msg.data1 & 0xF0) == 0x90 && msg.data2 > 0 && msg.data3 > 0 )
+            {
+                // get the pitch and convert to frequencey; set
+                msg.data2 => Std.mtof => s.freq;
+                // velocity data; note on
+                msg.data3/127.0 => s.noteOn;
+                cherr <= "NOTE ON track:" <= track <= " pitch:" <= msg.data2 <=" velocity:" <= msg.data3 <= IO.newline(); 
+            }
+        // other messages
+            else
+            {
+            // log
+            // cherr <= "----EVENT (unhandled) track:" <= track <= " type:" <= (msg.data1&0xF0)
+            //      <= " data2:" <= msg.data2 <= " data3:" <= msg.data3 <= IO.newline(); 
+            }
+    
+        }
+    }
+       
+  if (track == 3)
+   {   NRev reverb => dac;
+       0.10 => reverb.mix;
+       BandedWG s ;
+       3 => s.preset;
+       0.2 => s.gain;
+        s => reverb;
+    
+        while( min.read( msg, track ) )
+        {
+            // this means no more MIDI events at current time; advance time
+            if( msg.when > 0::second )
+                msg.when  => now; // this could be used to change speed 
+        
+        // catch NOTEON messages (lower nibble == 0x90)
+            if( (msg.data1 & 0xF0) == 0x90 && msg.data2 > 0 && msg.data3 > 0 )
+            {
+                // get the pitch and convert to frequencey; set
+                msg.data2 => Std.mtof => s.freq;
+                // velocity data; note on
+                msg.data3/127.0 => s.noteOn;
+                cherr <= "NOTE ON track:" <= track <= " pitch:" <= msg.data2 <=" velocity:" <= msg.data3 <= IO.newline(); 
+            }
+        // other messages
+            else
+            {
+            // log
+            // cherr <= "----EVENT (unhandled) track:" <= track <= " type:" <= (msg.data1&0xF0)
+            //      <= " data2:" <= msg.data2 <= " data3:" <= msg.data3 <= IO.newline(); 
+            }
+    
+        }
+    }
+    // done with track
+    
     done++;
 }
