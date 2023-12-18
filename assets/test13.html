@@ -6,9 +6,11 @@
     <title>Final project</title>
 
     <script type="module" defer>
-      import { Chuck } from "https://cdn.jsdelivr.net/npm/webchuck/+esm";
+      import { Chuck } from 'https://cdn.jsdelivr.net/npm/webchuck/+esm';
 
       document.getElementById("action").addEventListener("click", async () => {
+        // Initialize default ChucK object, if not already initialized
+        window.theChuck ??= await Chuck.init([]);
         var xhr = new XMLHttpRequest();
         xhr.open(
           "POST",
