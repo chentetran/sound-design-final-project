@@ -58,7 +58,7 @@ fun void WaterFunc( int track )
 { if (filename == "melody.mid") 
    {NRev reverb => Echo echo => LPF filter => dac;
     ModalBar s => reverb ;
-    600 => filter.freq;
+    500 => filter.freq;
     4 => s.gain;
     0.2 => reverb.mix;
     1.5 => echo.gain;
@@ -159,8 +159,8 @@ fun void CreepFunc( int track )
    {NRev reverb => dac;
     BlowHole s => reverb ;
     //800 => filter.freq;=> LPF filter
-    0.2 => s.gain;
-    0.05 => reverb.mix;
+    0.1 => s.gain;
+    0.1 => reverb.mix;
     //0 => echo.gain;=> Echo echo
    // 0.10:: second => echo.max=> echo.delay;
         //wat => s ;
@@ -300,7 +300,7 @@ fun void GameFunc( int track )
 fun void NoneFunc( int track )
 { if (filename == "melody.mid") 
    {    NRev reverb => dac;
-        TriOsc s => ADSR env => reverb ;
+        SinOsc s => ADSR env => reverb ;
         0.1 => s.gain;
         0.1 => reverb.mix;
     while( min.read( msg, track ) )
@@ -317,7 +317,7 @@ fun void NoneFunc( int track )
              float duration;
             msg.data3/127.0 => duration;
             //<<< duration>>>;
-            (25::ms, duration::second, 1, 25::ms) => env.set;
+            (50::ms, duration::second, 1, duration::second) => env.set;
              1 => env.keyOn;
             cherr <= "NOTE ON track:" <= track <= " pitch:" <= msg.data2 <=" velocity:" <= msg.data3 <= IO.newline(); 
             }
@@ -352,7 +352,7 @@ fun void NoneFunc( int track )
   if (filename == "bassline.mid")
    {  //NRev reverb => dac;
         SinOsc saw => ADSR env => dac;
-        0.3 => saw.gain;
+        0.2 => saw.gain;
         //0.1 => reverb.mix;
     while( min.read( msg, track ) )
         {
